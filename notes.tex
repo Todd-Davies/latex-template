@@ -1,0 +1,48 @@
+\documentclass{article}
+
+% Gives us lovely headers
+\usepackage{fancyhdr}
+% Means you don't have to put \\ to start a new line.
+\usepackage[parfill]{parskip}
+% For line brakes in tables
+\usepackage{tabularx}
+% For the split environment
+\usepackage{amsmath}
+% For tabs in verbatim and the listings environment
+\usepackage{moreverb}
+% Gives us bigger margins on the right (and smaller on the left) for the margin
+% paragraphs
+\usepackage[left=2cm,
+			top=3cm,
+			right=5cm,
+			bottom=3cm,
+			marginparwidth=4cm,
+			marginparsep=3mm]{geometry}
+
+% Means that I don't have to type \marginpar{\raggedright \scriptsize every 
+% time I want a margin paragraph
+\makeatletter
+\renewcommand{\@marginparreset}{%
+  \reset@font\scriptsize
+  \raggedright
+  \@setminipage
+}
+\makeatother
+
+\begin{document}
+% Meta
+\author{Todd Davies}
+\title{TITLE}
+\rhead{TITLE}
+\chead{}
+
+\maketitle
+
+{\small Note, extra space has been allocated for the right hand margin to allow
+for more extensive margin notes. Also, it gives you space to make your own
+annotations and perhaps try some problems of your own.}
+
+\tableofcontents
+\newpage
+
+\end{document}
