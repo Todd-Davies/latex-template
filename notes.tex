@@ -18,6 +18,16 @@
 			bottom=3cm,
 			marginparwidth=4cm,
 			marginparsep=3mm]{geometry}
+% Lets us set the author and title of the compiled pdf file
+\usepackage[pdftex]{hyperref}
+
+% Import the packages for the notes
+\input{packages.tex}
+
+\input{meta.tex}
+% Meta
+\author{\Author}
+\title{\Title}
 
 % Means that I don't have to type \marginpar{\raggedright \scriptsize every 
 % time I want a margin paragraph
@@ -30,19 +40,20 @@
 \makeatother
 
 \begin{document}
-% Meta
-\author{Todd Davies}
-\title{TITLE}
+% Set the headers
 \rhead{TITLE}
 \chead{}
+
 
 \maketitle
 
 {\small Note, extra space has been allocated for the right hand margin to allow
 for more extensive margin notes. Also, it gives you space to make your own
-annotations and perhaps try some problems of your own.}
+annotations.}
 
 \tableofcontents
 \newpage
+
+\input{content.tex}
 
 \end{document}

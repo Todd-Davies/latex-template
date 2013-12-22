@@ -1,0 +1,25 @@
+\documentclass[a5paper, 12pt]{article}
+% Lets us set the author and title of the compiled pdf file
+\usepackage[pdftex]{hyperref}
+
+% Import the packages for the notes
+\input{packages.tex}
+
+% Set the tab size in verbatim to 1
+\def\verbatimtabsize{1\relax}
+
+% We don't want margin paragraphs for the kindle notes
+% TODO: Make the inline somehow
+\renewcommand{\marginpar}[2][]{}
+
+\begin{document}
+
+% Get the author, the title etc
+\input{meta.tex}
+
+\maketitle
+
+% Get the content of the file
+\input{content.tex}
+
+\end{document}
