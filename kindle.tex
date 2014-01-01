@@ -20,8 +20,10 @@
 \def\verbatimtabsize{1\relax}
 
 % We don't want margin paragraphs for the kindle notes
-% TODO: Make the inline somehow
-\renewcommand{\marginpar}[2][]{}
+%\renewcommand{\marginpar}[2][]{}
+
+% Make margin paragrahs inline
+\renewcommand{\marginpar}[1]{\par{\itshape#1}\par}
 
 \begin{document}
 
