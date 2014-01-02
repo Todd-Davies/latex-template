@@ -5,6 +5,9 @@
 % Lets make the text nice and big
 \usepackage[14pt]{extsizes}
 
+% Make a box around would-be margin paragraphs
+\usepackage{tcolorbox}
+
 % Make the borders really small
 \usepackage[left=1cm,
 			top=1cm,
@@ -19,11 +22,11 @@
 % Set the tab size in verbatim to 1
 \def\verbatimtabsize{1\relax}
 
-% We don't want margin paragraphs for the kindle notes
-%\renewcommand{\marginpar}[2][]{}
-
 % Make margin paragrahs inline
-\renewcommand{\marginpar}[1]{\par{\itshape#1}\par}
+\renewcommand{\marginpar}[1]{
+\begin{tcolorbox}[colback=white!5,colframe=white!40!black,title=Note:]
+#1
+\end{tcolorbox}}
 
 \begin{document}
 
