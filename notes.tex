@@ -34,9 +34,10 @@
 
 \begin{document}
 % Set the headers
-\rhead{TITLE}
+\rhead{\title}
 \chead{}
 
+%\newgeometry{left=3cm,bottom=0.1cm}
 
 \maketitle
 
@@ -44,8 +45,13 @@
 for more extensive margin notes. Also, it gives you space to make your own
 annotations.}
 
+\courseinfo
+\newpage
+
 \tableofcontents
 \newpage
+
+\restoregeometry
 
 \input{content.tex}
 
