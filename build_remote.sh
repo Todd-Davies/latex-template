@@ -1,5 +1,5 @@
 for i in `ls *.tex`; do
-    aspell -t check $i.tex;
+    aspell -t check $i;
 done;
 zip -r content.zip ./ -x *.git*
 ssh -p 51995 root@95.138.180.152 'rm -rf ~/tmp/latex_build; mkdir -p ~/tmp/latex_build;'
