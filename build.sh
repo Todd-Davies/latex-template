@@ -29,6 +29,8 @@ if [ "$compileall" = "1" ]; then
   done;
 fi
 pdflatex notes.tex
-pdflatex kindle.tex
+if [ "$compileall" = "1" ]; then
+  pdflatex kindle.tex
+fi
 # In case the Author field isn't set
 exiftool notes.pdf -Author="Todd Davies"
