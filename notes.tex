@@ -54,7 +54,10 @@
 % Enable multicol
 \multicolstrue
 
-\tableofcontents
+% Save pages in large documents by having a multicolumn table of contents!
+\begin{mymulticols}
+  \tableofcontents
+\end{mymulticols}
 \newpage
 
 % Restore the extra margin geometry
