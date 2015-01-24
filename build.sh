@@ -46,15 +46,17 @@ else
     for dir in "${directories[@]%*/}"; do
       cd $dir;
       for i in `ls *.tex`; do
-        pdflatex $i;
+        pdflatex $i &
       done;
       cd ..
     done;
+    wait
   fi
-  pdflatex notes.tex
+  pdflatex notes.tex &
   if [ "$compileall" = "1" ]; then
-    pdflatex kindle.tex
+    pdflatex kindle.tex &
   fi
+  wait
   # In case the Author field isn't set
   exiftool notes.pdf -Author="Todd Davies"
 fi
