@@ -1,14 +1,19 @@
 #!/bin/bash
 
+hostname="todddavies.co.uk"
+hostport=22
+remoteuser="root"
+
 compileall=
 remote=
-
-port=22
-host=todddavies.co.uk
+fastArgs=""
 
 function usage
 {
-  echo "usage: build.sh [-a -r ]"
+  echo "usage: build.sh [-a -r -f]"
+  echo "  -a (Re)Compile all diagrams, kindle versions etc (slow!)"
+  echo "  -r Compile on a remote server"
+  echo "  -f Compile quickly (maybe taking shortcuts along the way)"
 }
 
 while [ "$1" != "" ]; do
@@ -16,6 +21,8 @@ while [ "$1" != "" ]; do
         -a | --compileall )     compileall=1
                                 ;;
         -r | --remote )         remote=1
+                                ;;
+        -f | --fast )           fastArgs="\def\fastCompile{1} "
                                 ;;
         -h | --help )           usage
                                 exit
@@ -31,11 +38,11 @@ done;
 
 if [ "$remote" = 1 ]; then
   zip -r content.zip ./ -x *.git*
-  ssh -p $port root@$host 'rm -rf /tmp/latex_build; mkdir -p /tmp/latex_build;'
-  scp -P $port content.zip root@$host:/tmp/latex_build
-  ssh -p $port root@$host "cd /tmp/latex_build/;unzip content.zip;rm content.zip;./build.sh -n;zip content.zip ./*.pdf;"
+  ssh -p $hostport $remoteuser@$hostname 'rm -rf ~/tmp/latex_build; mkdir -p ~/tmp/latex_build;'
+  scp -P $hostport content.zip $remoteuser@$hostname:~/tmp/latex_build
+  ssh -p $hostport $remoteuser@$hostname "cd ~/tmp/latex_build/;unzip content.zip;rm content.zip;./build.sh -n;zip content.zip ./*.pdf;"
   rm content.zip
-  scp -P $port root@$host:/tmp/latex_build/content.zip ./content.zip
+  scp -P $hostport $remoteuser@$hostname:~/tmp/latex_build/content.zip ./content.zip
   unzip -o content.zip
   rm content.zip
 else
@@ -50,9 +57,10 @@ else
     done;
     wait;
   fi
-  pdflatex notes.tex &
+  # TODO: Make this take arguments
+  pdflatex "$fastArgs\input{notes.tex}" &
   if [ "$compileall" = "1" ]; then
-    pdflatex kindle.tex &
+    pdflatex "$fastArgs\input{kindle.tex}" &
   fi
   wait;
   # In case the Author field isn't set
