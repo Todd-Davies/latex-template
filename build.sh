@@ -1,8 +1,6 @@
 #!/bin/bash
 
-hostname="todddavies.co.uk"
-hostport=22
-remoteuser="root"
+source config.sh
 
 compileall=
 remote=
@@ -47,22 +45,34 @@ if [ "$remote" = 1 ]; then
   rm content.zip
 else
   if [ "$compileall" = "1" ]; then
-    directories=(diagrams);
     for dir in "${directories[@]%*/}"; do
       cd $dir;
       for i in `ls *.tex`; do
-        pdflatex $i &
+        if [ $parallelCompile -eq "true" ]; then
+          pdflatex $i &
+        else 
+          pdflatex $i;
+        fi
       done;
       cd ..
     done;
-    wait;
+    if [ $parallelCompile -eq "true" ]; then
+      wait;
+    fi
   fi
-  # TODO: Make this take arguments
-  pdflatex "$fastArgs\input{notes.tex}" &
+  if [ $parallelCompile -eq "true" ]; then
+    pdflatex "$fastArgs\input{notes.tex}" &
+  else
+    pdflatex "$fastArgs\input{notes.tex}";
+  fi
   if [ "$compileall" = "1" ]; then
-    pdflatex "$fastArgs\input{kindle.tex}" &
+    if [ $parallelCompile -eq "true" ]; then
+      pdflatex "$fastArgs\input{kindle.tex}" &
+    else
+      pdflatex "$fastArgs\input{kindle.tex}";
+    fi
   fi
   wait;
   # In case the Author field isn't set
-  exiftool notes.pdf -Author="Todd Davies"
+  exiftool notes.pdf -Author="$authorName"
 fi
