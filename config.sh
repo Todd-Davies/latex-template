@@ -18,4 +18,7 @@ authorName="Todd Davies"
 directories=();
 
 # Use parallel compilation (true/false)
-parallelCompile="true"
+parallelCompile=1
+preCompileCommands=preCommands.tmp
+commands=commands.tmp
+logFile=parallelCompile.log
