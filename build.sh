@@ -44,7 +44,7 @@ function remoteCompile
   zip -r content.zip ./ -x *.git*;
   ssh -p $hostport $remoteuser@$hostname 'rm -rf ~/tmp/latex_build; mkdir -p ~/tmp/latex_build;';
   scp -P $hostport content.zip $remoteuser@$hostname:~/tmp/latex_build;
-  ssh -p $hostport $remoteuser@$hostname "cd ~/tmp/latex_build/;unzip content.zip;rm content.zip;./build.sh -n;zip content.zip ./*.pdf;";
+  ssh -p $hostport $remoteuser@$hostname "cd ~/tmp/latex_build/;unzip content.zip;rm content.zip;./build.sh -a -s;zip content.zip ./*.pdf;";
   rm content.zip;
   scp -P $hostport $remoteuser@$hostname:~/tmp/latex_build/content.zip ./content.zip;
   unzip -o content.zip;
