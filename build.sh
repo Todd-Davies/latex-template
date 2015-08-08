@@ -51,6 +51,12 @@ function remoteCompile
   rm content.zip;
 }
 
+function parallelCompile()
+{
+  numCmd=`wc -l $1 | awk '{ print $1 }'`;
+  cat $1 | parallel bash -c "{} >> $logFile && echo done" | pv -p -l -s $numCmd -N "$2" > /dev/null;
+}
+
 # Spell check all the things!
 # TODO(td): Implement optional whitelist for spellchecking
 for i in `ls *.tex`; do
@@ -76,20 +82,18 @@ else
       done;
     done;
     # Compile the kindle notes if we're doing everything
-    echo "pdflatex $fastArgs\"\input{kindle.tex}\"" >> $commands;
+    echo "pdflatex -shell-escape $fastArgs\"\input{kindle.tex}\"" >> $commands;
   fi
   # Compile the main notes file
-  echo "pdflatex $fastArgs\"\input{notes.tex}\"" >> $commands;
+  echo "pdflatex -shell-escape $fastArgs\"\input{notes.tex}\"" >> $commands;
   if [ $parallelCompile = 1 ]; then
     if [ -s $logFile ]; then 
       rm $logFile;
     fi
     if [ -s $preCompileCommands ]; then
-      numCmd=`wc -l $preCompileCommands`;
-      cat $preCompileCommands | parallel bash -c "{}" >> $logFile | pv -p -e -l -s $numCmd -N "Compiling resources:" > /dev/null;
+      parallelCompile $preCompileCommands "Compiling reosurces:";
     fi
-    numCmd=`wc -l $commands`;
-    cat $commands | parallel bash -c "{}" >>  | pv -p -e -l -s $numCmd -N "Compiling output:" > /dev/null;
+    parallelCompile $commands "Compiling output:";
   else
     if [ -s $preCompileCommands ]; then
       bash $preCompileCommands;
@@ -97,5 +101,5 @@ else
     bash $commands;
   fi
   # In case the Author field isn't set
-  exiftool notes.pdf -Author='$authorName' >> $logFile;
+  #exiftool notes.pdf -Author='$authorName' >> $logFile;
 fi
