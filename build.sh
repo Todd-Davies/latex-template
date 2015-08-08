@@ -77,9 +77,11 @@ if [ "$remote" = 1 ]; then
 else
   if [ "$compileall" = 1 ]; then
     for dir in "${directories[@]%*/}"; do
-      for i in `ls $dir/*.tex`; do
-        echo "pdflatex "`pwd`"/$i" > $preCompileCommands;
+      cd $dir
+      for i in `ls *.tex`; do
+        echo "cd $dir && pdflatex $i && cd .." >> ../$preCompileCommands;
       done;
+      cd ..
     done;
     # Compile the kindle notes if we're doing everything
     echo "pdflatex -shell-escape $fastArgs\"\input{kindle.tex}\"" >> $commands;
