@@ -10,6 +10,9 @@ fi
 compileall=
 remote=
 fastArgs=""
+logFile=output.log
+
+errors=0
 
 function usage
 {
@@ -54,7 +57,7 @@ function remoteCompile
 function parallelCompile()
 {
   numCmd=`wc -l $1 | awk '{ print $1 }'`;
-  cat $1 | parallel bash -c "{} >> $logFile && echo done" | pv -p -l -s $numCmd -N "$2" > /dev/null;
+  cat $1 | parallel --eta bash -c "{} >> $logFile"; if [ $? -eq 1 ]; then errors=1; fi;
 }
 
 # Spell check all the things!
@@ -102,6 +105,16 @@ else
     fi
     bash $commands;
   fi
-  # In case the Author field isn't set
-  #exiftool notes.pdf -Author='$authorName' >> $logFile;
+  if [ $errors = 0 ]; then
+    # In case the Author field isn't set
+    exiftool notes.pdf -Author='$authorName' >> $logFile;
+  fi
+fi
+
+if [ $parallelCompile = 1 ]; then
+  if [ -s $logFile ]; then
+    if [ $errors = 1 ]; then
+      cat $logFile;
+    fi
+  fi
 fi
